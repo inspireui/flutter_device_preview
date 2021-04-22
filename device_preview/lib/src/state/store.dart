@@ -75,10 +75,13 @@ class DevicePreviewStore extends ChangeNotifier {
                 .where((x) => x != null)
                 .toList()
             : defaultAvailableLocales;
-        final defaultLocale = basicLocaleListResolution(
-          WidgetsBinding.instance!.window.locales,
-          availaiableLocales.map((x) => x!.locale).toList(),
-        ).toString();
+
+         /// Fix Flutter web issue
+//         final defaultLocale = basicLocaleListResolution(
+//           WidgetsBinding.instance!.window.locales,
+//           availaiableLocales.map((x) => x!.locale).toList(),
+//         ).toString();
+        final defaultLocale = 'en';
 
         devices = devices ?? Devices.all;
         DevicePreviewData? data;
