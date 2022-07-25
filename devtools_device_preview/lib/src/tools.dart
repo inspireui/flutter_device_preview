@@ -62,8 +62,6 @@ abstract class DevicePreviewDevtools {
 
   static Future<void> setDevice(DeviceInfo? device) async {
     PreviewWidgetsFlutterBinding.previewBinding.device = device;
-    if (WidgetsBinding.instance != null) {
-      await WidgetsBinding.instance!.reassembleApplication();
-    }
+    await WidgetsBinding.instance.reassembleApplication();
   }
 }
