@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import 'devices.dart';
+import 'info/device_type.dart';
 import 'info/info.dart';
 
 /// Simulate a physical device and embedding a virtual
 /// [screen] into it.
 ///
 /// The [screen] media query's `padding`, `devicePixelRatio`, `size` are also
-/// simulated from the device's info
+/// simulated from the device's info by overriding the default values.
 ///
-/// The [screen] theme will also have the `platform` of the simulated device.
+/// The [screen]'s [Theme] will also have the `platform` of the simulated device.
 ///
 /// Using the [DeviceFrame.identifier] constructor will load an
 /// svg file from assets first to get device frame visuals, but also
@@ -25,9 +24,6 @@ import 'info/info.dart';
 /// * [Devices] to get all available devices.
 ///
 class DeviceFrame extends StatelessWidget {
-  /// The unique identifier of the simulated device.
-  final DeviceIdentifier identifier;
-
   /// The screen that should be inserted into the simulated
   /// device.
   ///
@@ -55,35 +51,25 @@ class DeviceFrame extends StatelessWidget {
   ///
   /// If [isFrameVisible] is `true`, only the [screen] is displayed, but clipped with
   /// the device screen shape.
-  DeviceFrame({
+  const DeviceFrame({
     Key? key,
     required this.device,
     required this.screen,
     this.orientation = Orientation.portrait,
     this.isFrameVisible = true,
-  })  : identifier = device.identifier,
-        super(key: key);
+  }) : super(key: key);
 
-  static bool isRotated(DeviceInfo? info, Orientation orientation) {
-    return info != null &&
-        info.canRotate &&
-        orientation == Orientation.landscape;
-  }
-
-  static Future<void> precache(BuildContext context) async {
-    for (var device in Devices.all) {
-      await precachePicture(
-        StringPicture(SvgPicture.svgStringDecoder, device.svgFrame),
-        context,
-      );
-    }
-  }
-
-  static MediaQueryData mediaQuery(
-      BuildContext context, DeviceInfo? info, Orientation orientation) {
+  /// Creates a [MediaQuery] from the given device [info], and for the current device [orientation].
+  ///
+  /// All properties that are not simulated are inherited from the current [context]'s inherited [MediaQuery].
+  static MediaQueryData mediaQuery({
+    required BuildContext context,
+    required DeviceInfo? info,
+    required Orientation orientation,
+  }) {
     final mediaQuery = MediaQuery.of(context);
-    final isRotated = DeviceFrame.isRotated(info, orientation);
-    final padding = isRotated
+    final isRotated = info?.isLandscape(orientation) ?? false;
+    final viewPadding = isRotated
         ? (info?.rotatedSafeAreas ?? info?.safeAreas)
         : (info?.safeAreas ?? mediaQuery.padding);
 
@@ -93,9 +79,9 @@ class DeviceFrame extends StatelessWidget {
 
     return mediaQuery.copyWith(
       size: Size(width, height),
-      padding: padding,
+      padding: viewPadding,
       viewInsets: EdgeInsets.zero,
-      viewPadding: padding,
+      viewPadding: viewPadding,
       devicePixelRatio: info?.pixelRatio ?? mediaQuery.devicePixelRatio,
     );
   }
@@ -104,18 +90,18 @@ class DeviceFrame extends StatelessWidget {
     final density = [
       DeviceType.desktop,
       DeviceType.laptop,
-    ].contains(identifier.type)
+    ].contains(device.identifier.type)
         ? VisualDensity.compact
         : null;
     return Theme.of(context).copyWith(
-      platform: identifier.platform,
+      platform: device.identifier.platform,
       visualDensity: density,
     );
   }
 
   Widget _screen(BuildContext context, DeviceInfo? info) {
     final mediaQuery = MediaQuery.of(context);
-    final isRotated = DeviceFrame.isRotated(info, orientation);
+    final isRotated = info?.isLandscape(orientation) ?? false;
     final screenSize = info != null ? info.screenSize : mediaQuery.size;
     final width = isRotated ? screenSize.height : screenSize.width;
     final height = isRotated ? screenSize.width : screenSize.height;
@@ -126,7 +112,11 @@ class DeviceFrame extends StatelessWidget {
         width: width,
         height: height,
         child: MediaQuery(
-          data: DeviceFrame.mediaQuery(context, info, orientation),
+          data: DeviceFrame.mediaQuery(
+            info: info,
+            orientation: orientation,
+            context: context,
+          ),
           child: Theme(
             data: _theme(context),
             child: screen,
@@ -147,14 +137,14 @@ class DeviceFrame extends StatelessWidget {
         children: [
           if (isFrameVisible)
             Positioned.fill(
-              key: Key('frame'),
-              child: SvgPicture.string(
-                device.svgFrame,
-                key: ValueKey(identifier),
+              key: const Key('frame'),
+              child: CustomPaint(
+                key: ValueKey(device.identifier),
+                painter: device.framePainter,
               ),
             ),
           Positioned(
-            key: Key('Screen'),
+            key: const Key('Screen'),
             left: isFrameVisible ? bounds.left : 0,
             top: isFrameVisible ? bounds.top : 0,
             width: bounds.width,
@@ -172,7 +162,7 @@ class DeviceFrame extends StatelessWidget {
       ),
     );
 
-    final isRotated = DeviceFrame.isRotated(device, orientation);
+    final isRotated = device.isLandscape(orientation);
 
     return FittedBox(
       child: RotatedBox(
@@ -184,9 +174,9 @@ class DeviceFrame extends StatelessWidget {
 }
 
 class _ScreenClipper extends CustomClipper<Path> {
-  final Path? path;
-
   const _ScreenClipper(this.path);
+
+  final Path? path;
 
   @override
   Path getClip(Size size) {

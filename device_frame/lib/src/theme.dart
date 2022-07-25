@@ -9,14 +9,21 @@ part 'theme.freezed.dart';
 ///
 /// The only customizable visuals are the keyboard style.
 class DeviceFrameTheme extends InheritedWidget {
-  final DeviceFrameStyle style;
-
   /// Give a [style] to all descentant in [child] device frames.
   const DeviceFrameTheme({
+    Key? key,
     required this.style,
     required Widget child,
-  }) : super(child: child);
+  }) : super(
+          key: key,
+          child: child,
+        );
 
+  /// The style of the device frame.
+  final DeviceFrameStyle style;
+
+  /// The data from the closest instance of this class that encloses the given
+  /// [context].
   static DeviceFrameStyle of(BuildContext context) {
     final widget =
         context.dependOnInheritedWidgetOfExactType<DeviceFrameTheme>();
@@ -37,23 +44,22 @@ class DeviceFrameTheme extends InheritedWidget {
 /// * [DeviceKeyboardStyle] to customize the virtual on screen keyboard.
 @freezed
 abstract class DeviceFrameStyle with _$DeviceFrameStyle {
+  /// Create a [DeviceFrameStyle] with the given [keyboardStyle].
   const factory DeviceFrameStyle({
     required DeviceKeyboardStyle keyboardStyle,
   }) = _DeviceFrameStyle;
 
+  /// A default dark theme.
   factory DeviceFrameStyle.dark({DeviceKeyboardStyle? keyboardStyle}) =>
-      DeviceFrameStyle(
-        keyboardStyle: keyboardStyle ?? DeviceKeyboardStyle.dark(),
-      );
-
-  factory DeviceFrameStyle.light({DeviceKeyboardStyle? keyboardStyle}) =>
       DeviceFrameStyle(
         keyboardStyle: keyboardStyle ?? DeviceKeyboardStyle.dark(),
       );
 }
 
+/// The keyboard style allows to customize the virtual onscreen keyboard visuals.
 @freezed
 abstract class DeviceKeyboardStyle with _$DeviceKeyboardStyle {
+  /// Creates a new style for the virtual keyboard.
   const factory DeviceKeyboardStyle({
     required Color backgroundColor,
     required Color button1BackgroundColor,
@@ -62,6 +68,7 @@ abstract class DeviceKeyboardStyle with _$DeviceKeyboardStyle {
     required Color button2ForegroundColor,
   }) = _DeviceKeyboardStyle;
 
+  /// A default dark theme for the virtual keyboard.
   factory DeviceKeyboardStyle.dark() => const DeviceKeyboardStyle(
         backgroundColor: Color(0xDD2B2B2D),
         button1BackgroundColor: Color(0xFF6D6D6E),

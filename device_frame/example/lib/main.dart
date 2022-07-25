@@ -2,40 +2,29 @@ import 'package:device_frame/device_frame.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
-  runApp(ExampleApp());
+  runApp(const ExampleApp());
 }
 
 class ExampleApp extends StatefulWidget {
-  // This widget is the root of your application.
+  const ExampleApp({Key? key}) : super(key: key);
+
   @override
   _ExampleAppState createState() => _ExampleAppState();
 }
 
 class _ExampleAppState extends State<ExampleApp> {
   bool isDark = true;
-  bool hasShadow = true;
+  bool isFrameVisible = true;
   bool isKeyboard = false;
   bool isEnabled = true;
 
-  @override
-  void initState() {
-    DeviceFrame.precache(context);
-    super.initState();
-  }
-
   final GlobalKey screenKey = GlobalKey();
-  List<DeviceInfo> allDevices = [
-    ...Devices.ios.all,
-    ...Devices.android.all,
-    ...Devices.macos.all,
-    ...Devices.windows.all,
-    ...Devices.linux.all,
-  ];
+
   Orientation orientation = Orientation.portrait;
   Widget _frame(DeviceInfo device) => Center(
         child: DeviceFrame(
           device: device,
-          isFrameVisible: hasShadow,
+          isFrameVisible: isFrameVisible,
           orientation: orientation,
           screen: Container(
             color: Colors.blue,
@@ -49,10 +38,8 @@ class _ExampleAppState extends State<ExampleApp> {
 
   @override
   Widget build(BuildContext context) {
-    var style = isDark ? DeviceFrameStyle.dark() : DeviceFrameStyle.light();
-
     return DeviceFrameTheme(
-      style: style,
+      style: DeviceFrameStyle.dark(),
       child: MaterialApp(
         title: 'Device Frames',
         theme: ThemeData(
@@ -60,19 +47,19 @@ class _ExampleAppState extends State<ExampleApp> {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: DefaultTabController(
-          length: allDevices.length,
+          length: Devices.all.length,
           child: Scaffold(
             backgroundColor: isDark ? Colors.white : Colors.black,
             appBar: AppBar(
-              title: Text('Device Frames'),
+              title: const Text('Device Frames'),
               actions: <Widget>[
                 IconButton(
                   onPressed: () {
                     setState(() {
-                      hasShadow = !hasShadow;
+                      isFrameVisible = !isFrameVisible;
                     });
                   },
-                  icon: Icon(Icons.settings_brightness),
+                  icon: const Icon(Icons.settings_brightness),
                 ),
                 IconButton(
                   onPressed: () {
@@ -80,25 +67,29 @@ class _ExampleAppState extends State<ExampleApp> {
                       isDark = !isDark;
                     });
                   },
-                  icon: Icon(Icons.brightness_medium),
+                  icon: const Icon(Icons.brightness_medium),
                 ),
                 IconButton(
                   onPressed: () {
-                    setState(() {
-                      orientation = orientation == Orientation.landscape
-                          ? Orientation.portrait
-                          : Orientation.landscape;
-                    });
+                    setState(
+                      () {
+                        orientation = orientation == Orientation.landscape
+                            ? Orientation.portrait
+                            : Orientation.landscape;
+                      },
+                    );
                   },
-                  icon: Icon(Icons.rotate_90_degrees_ccw),
+                  icon: const Icon(Icons.rotate_90_degrees_ccw),
                 ),
                 IconButton(
                   onPressed: () {
-                    setState(() {
-                      isKeyboard = !isKeyboard;
-                    });
+                    setState(
+                      () {
+                        isKeyboard = !isKeyboard;
+                      },
+                    );
                   },
-                  icon: Icon(Icons.keyboard),
+                  icon: const Icon(Icons.keyboard),
                 ),
                 /*IconButton(
                   onPressed: () {
@@ -112,8 +103,11 @@ class _ExampleAppState extends State<ExampleApp> {
               bottom: TabBar(
                 isScrollable: true,
                 tabs: [
-                  ...allDevices
-                      .map((x) => Tab(text: '${x.identifier.type} ${x.name}')),
+                  ...Devices.all.map(
+                    (x) => Tab(
+                      text: '${x.identifier.type} ${x.name}',
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -124,9 +118,11 @@ class _ExampleAppState extends State<ExampleApp> {
                   builder: (context) => !isEnabled
                       ? FakeScreen(key: screenKey)
                       : AnimatedBuilder(
-                          animation: DefaultTabController.of(context),
-                          builder: (context, _) => _frame(allDevices[
-                              DefaultTabController.of(context).index]),
+                          animation: DefaultTabController.of(context)!,
+                          builder: (context, _) => _frame(
+                            Devices
+                                .all[DefaultTabController.of(context)!.index],
+                          ),
                         ),
                 ),
               ),
@@ -139,7 +135,9 @@ class _ExampleAppState extends State<ExampleApp> {
 }
 
 class FakeScreen extends StatefulWidget {
-  const FakeScreen({Key key}) : super(key: key);
+  const FakeScreen({
+    Key? key,
+  }) : super(key: key);
   @override
   _FakeScreenState createState() => _FakeScreenState();
 }
@@ -180,7 +178,7 @@ class _FakeScreenState extends State<FakeScreen> {
               Text("Padding: ${mediaQuery.padding}"),
               Text("Insets: ${mediaQuery.viewInsets}"),
               Text("ViewPadding: ${mediaQuery.viewPadding}"),
-              if (isDelayEnded) Text("---"),
+              if (isDelayEnded) const Text("---"),
             ],
           ),
         ),

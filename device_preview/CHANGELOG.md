@@ -1,3 +1,94 @@
+## 1.1.0
+
+* Updated dependencies and adding support for Flutter 3.0.
+
+## 1.0.0-alpha.15
+
+* Updated device_frame which added new android devices and fixed padding.
+
+## 1.0.0-alpha.14
+
+* Missing export of `DeviceScreenshot`.
+
+## 1.0.0-alpha.13
+
+* Added device type section headers
+* Improved disabled item icon visibility changes.
+* Fixed accesible navigation, invert colors and bold text not available.
+* Removed path_drawing dependency.
+
+## 1.0.0-alpha.12
+
+* Updated device_frame which added a new list of devices.
+
+## 1.0.0-alpha.11
+
+* Added section visibility parameters to hide items.
+
+## 1.0.0-alpha.10
+
+* Added conditional import for web, to improve the pub.dev score.
+
+## 1.0.0-alpha.8
+
+* Removed generated files from example.
+
+## 1.0.0-alpha.7
+
+* Fixed `enabled` issue.
+* Fixed SVG issue with custom device.
+
+## 1.0.0-alpha.6
+
+* Upgraded `device_frame` dependency.
+* Fixed theming issues in small layout.
+
+## 1.0.0-alpha.5
+
+* Added `DevicePreview.selectedDevice` method. 
+
+## 1.0.0-alpha.4
+
+* Added `DevicePreview.availableDeviceIdentifiers` method. 
+
+## 1.0.0-alpha.3
+
+* Upgraded device_frame dependency.
+
+## 1.0.0-alpha.2
+
+* Upgraded provider dependency.
+
+## 1.0.0-alpha.1
+
+* Adaptative layout to make the tool easier to use on mobile.
+* Big refactor to make the package more maintainable :
+    * Switched all UI components to Material design
+    * Removed all include plugins *(available soon as separated packages)*
+
+## 0.8.0
+
+* Removed `DevicePreview.appBuilder` to switch to newer `useInheritedMediaQuery` property instead.
+
+## 0.7.5
+
+* Upgraded dependencies
+* Migrated to flutter_lints
+* Removed dependency to awesome_fonts
+
+## 0.7.4
+
+* Fixing `basicLocaleListResolution` throwing `imported from multiple packages` conflict error.
+
+## 0.7.3
+
+* Fixing missing part file.
+
+## 0.7.2
+
+* Upgraded dependencies.
+* Fixed issue on web with null empty locale list.
+
 ## 0.7.1
 
 * Fixed screenshot error.
