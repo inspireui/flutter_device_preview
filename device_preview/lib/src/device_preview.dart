@@ -525,6 +525,10 @@ class _DevicePreviewState extends State<DevicePreview> {
               (DevicePreviewStore store) => store.data.isToolbarVisible,
             );
 
+        final orientation = context.select(
+          (DevicePreviewStore store) => store.data.orientation,
+        );
+
         final toolbar = toolbarTheme.asThemeData();
         final background = backgroundTheme.asThemeData();
         return Directionality(
@@ -566,8 +570,6 @@ class _DevicePreviewState extends State<DevicePreview> {
                         Expanded(
                           child: Stack(
                             children: <Widget>[
-                              if (widget.subWidget != null)
-                                widget.subWidget!(context),
                               if (isToolbarVisible && isSmall)
                                 Positioned(
                                   key: const Key('Small'),
@@ -655,6 +657,8 @@ class _DevicePreviewState extends State<DevicePreview> {
                                   ),
                                 ),
                               ),
+                              if (widget.subWidget != null && orientation != Orientation.landscape)
+                                widget.subWidget!(context),
                             ],
                           ),
                         ),
