@@ -566,6 +566,8 @@ class _DevicePreviewState extends State<DevicePreview> {
                         Expanded(
                           child: Stack(
                             children: <Widget>[
+                              if (widget.subWidget != null)
+                                widget.subWidget!(context),
                               if (isToolbarVisible && isSmall)
                                 Positioned(
                                   key: const Key('Small'),
@@ -600,16 +602,18 @@ class _DevicePreviewState extends State<DevicePreview> {
                                 child: Theme(
                                   data: background,
                                   child: Container(
-                                    decoration: widget.decoration ?? BoxDecoration(
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          blurRadius: 20,
-                                          color: Color(0xAA000000),
+                                    decoration: widget.decoration ??
+                                        BoxDecoration(
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              blurRadius: 20,
+                                              color: Color(0xAA000000),
+                                            ),
+                                          ],
+                                          borderRadius: borderRadius,
+                                          color: background
+                                              .scaffoldBackgroundColor,
                                         ),
-                                      ],
-                                      borderRadius: borderRadius,
-                                      color: background.scaffoldBackgroundColor,
-                                    ),
                                     child: ClipRRect(
                                       borderRadius: borderRadius,
                                       child: isEnabled
@@ -651,7 +655,6 @@ class _DevicePreviewState extends State<DevicePreview> {
                                   ),
                                 ),
                               ),
-                              if (widget.subWidget != null) widget.subWidget!(context),
                             ],
                           ),
                         ),
