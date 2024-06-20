@@ -48,8 +48,7 @@ class PreviewWidgetsFlutterBinding extends BindingBase
   /// binding instance to a [TestWidgetsFlutterBinding], not a
   /// [WidgetsFlutterBinding].
   static WidgetsBinding ensureInitialized() {
-    if (WidgetsBinding.instance == null) PreviewWidgetsFlutterBinding();
-    return WidgetsBinding.instance!;
+    return WidgetsBinding.instance;
   }
 
   ui.SingletonFlutterWindow? _previewWindow;

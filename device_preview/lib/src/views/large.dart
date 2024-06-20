@@ -27,8 +27,10 @@ class DevicePreviewLargeLayoutState extends State<DevicePreviewLargeLayout> {
   @override
   void initState() {
     // Forcing rebuild to update absolute postion in `_overlayKey`
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) => setState(() {}),
+    WidgetsBinding.instance.endOfFrame.then(
+      (_) {
+        if (mounted) setState(() {});
+      }
     );
     super.initState();
   }

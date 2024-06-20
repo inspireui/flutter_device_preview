@@ -242,53 +242,53 @@ List<Widget> buildCustomDeviceTiles(BuildContext context) {
         ],
       ],
     ),
-    ToolPanelSection(
-      title: 'System',
-      children: [
-        ..._allPlatforms.map(
-          (p) => ListTile(
-            leading: TargetPlatformIcon(platform: p),
-            title: Text(
-              p.name,
-            ),
-            onTap: () {
-              final store = context.read<DevicePreviewStore>();
-              if (customDevice != null) {
-                store.updateCustomDevice(
-                  customDevice.copyWith(
-                    platform: p,
-                  ),
-                );
-              }
-            },
-          ),
-        ),
-      ],
-    ),
-    ToolPanelSection(
-      title: 'Form factor',
-      children: [
-        ..._allDeviceTypes.map(
-          (type) => ListTile(
-            leading: DeviceTypeIcon(
-              type: type,
-            ),
-            title: Text(
-              type.name,
-            ),
-            onTap: () {
-              final store = context.read<DevicePreviewStore>();
-              if (customDevice != null) {
-                store.updateCustomDevice(
-                  customDevice.copyWith(
-                    type: type,
-                  ),
-                );
-              }
-            },
-          ),
-        ),
-      ],
-    ),
+    // ToolPanelSection(
+    //   title: 'System',
+    //   children: [
+    //     ..._allPlatforms.map(
+    //       (p) => ListTile(
+    //         leading: TargetPlatformIcon(platform: p),
+    //         title: Text(
+    //           p.name,
+    //         ),
+    //         onTap: () {
+    //           final store = context.read<DevicePreviewStore>();
+    //           if (customDevice != null) {
+    //             store.updateCustomDevice(
+    //               customDevice.copyWith(
+    //                 platform: p,
+    //               ),
+    //             );
+    //           }
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // ),
+    // ToolPanelSection(
+    //   title: 'Form factor',
+    //   children: [
+    //     ..._allDeviceTypes.map(
+    //       (type) => ListTile(
+    //         leading: DeviceTypeIcon(
+    //           type: type,
+    //         ),
+    //         title: Text(
+    //           type.name,
+    //         ),
+    //         onTap: () {
+    //           final store = context.read<DevicePreviewStore>();
+    //           if (customDevice != null) {
+    //             store.updateCustomDevice(
+    //               customDevice.copyWith(
+    //                 type: type,
+    //               ),
+    //             );
+    //           }
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // ),
   ];
 }

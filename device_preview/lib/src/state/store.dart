@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import '../../device_preview.dart';
 import 'custom_device.dart';
-import '../../device_preview.dart' as device_preview;
+// import '../../device_preview.dart' as device_preview;
 
 /// The store is a container for the current [state] of the device preview.
 ///
@@ -72,12 +72,12 @@ class DevicePreviewStore extends ChangeNotifier {
                 .toList()
             : defaultAvailableLocales;
 
-        final defaultLocale = device_preview
-            .basicLocaleListResolution(
-              WidgetsBinding.instance.window.locales,
-              availaiableLocales.map((x) => x!.locale).toList(),
-            )
-            .toString();
+        /// Fix Flutter web issue
+        // final defaultLocale = device_preview.basicLocaleListResolution(
+        //   WidgetsBinding.instance!.window.locales,
+        //   availaiableLocales.map((x) => x!.locale).toList(),
+        // ).toString();
+        const defaultLocale = 'en';
 
         devices = devices ?? Devices.all;
         DevicePreviewData? data;
@@ -88,7 +88,7 @@ class DevicePreviewStore extends ChangeNotifier {
           print('[device_preview] Error while restoring data: $e');
         }
 
-        data ??= DevicePreviewData(
+        data ??= const DevicePreviewData(
           locale: defaultLocale,
           customDevice: _defaultCustomDevice,
         );
