@@ -60,6 +60,7 @@ class DevicePreview extends StatefulWidget {
     this.storage,
     this.enabled = true,
     this.backgroundColor,
+    this.padding,
     this.subWidget,
     this.appBar,
     this.decoration,
@@ -122,6 +123,19 @@ class DevicePreview extends StatefulWidget {
     AccessibilitySection(),
     SettingsSection(),
   ];
+
+  /// Additional bounding box surrounding the application preview.
+  ///
+  /// Default value:
+  /// ```dart
+  /// EdgeInsets.only(
+  ///   top: 20 + mediaQuery.viewPadding.top,
+  ///   right: 20 + mediaQuery.viewPadding.right,
+  ///   left: 20 + mediaQuery.viewPadding.left,
+  ///   bottom: 20,
+  /// )
+  /// ```
+  final EdgeInsetsGeometry? padding;
 
   @override
   _DevicePreviewState createState() => _DevicePreviewState();
@@ -433,12 +447,13 @@ class _DevicePreviewState extends State<DevicePreview> {
 
     return Container(
       color: widget.backgroundColor ?? theme.canvasColor,
-      padding: EdgeInsets.only(
-        top: 20 + mediaQuery.viewPadding.top,
-        right: 20 + mediaQuery.viewPadding.right,
-        left: 20 + mediaQuery.viewPadding.left,
-        bottom: 20,
-      ),
+      padding: widget.padding ??
+          EdgeInsets.only(
+            top: 20 + mediaQuery.viewPadding.top,
+            right: 20 + mediaQuery.viewPadding.right,
+            left: 20 + mediaQuery.viewPadding.left,
+            bottom: 20,
+          ),
       child: FittedBox(
         fit: BoxFit.contain,
         child: RepaintBoundary(

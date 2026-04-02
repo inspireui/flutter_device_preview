@@ -1,3 +1,11 @@
+## 1.3.1
+
+* Adds padding property to `DevicePreview` to allow custom padding around the device frame.
+
+## 1.3.0
+
+* Updated dependencies and adding support for Flutter 3.32.
+
 ## 1.2.0
 
 * Updated dependencies and adding support for Flutter 3.2.
